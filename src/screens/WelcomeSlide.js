@@ -11,6 +11,9 @@ const WelcomeSlide = () => {
   const goToLogin = () => {
     navigation.navigate("Login");
   };
+  const goToAxios = () => {
+    navigation.navigate("Axios");
+  };
 
   const Slide1 = () => {
     return (
@@ -41,6 +44,8 @@ const WelcomeSlide = () => {
         >
           <Button title="Registrarse" onPress={goToRegister} />
           <Button title="Iniciar sesión" onPress={goToLogin} />
+          <Button title="Axios" onPress={goToAxios} />
+
         </ImageBackground>
       </View>
     );

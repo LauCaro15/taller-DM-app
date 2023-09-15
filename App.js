@@ -8,7 +8,6 @@ import { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeStack from "./src/stack/HomeStack";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import ApiFake from "./src/screens/ApiFake";
 
 const Tab = createBottomTabNavigator();
 
@@ -22,7 +21,7 @@ export default function App() {
   return (
     <NavigationContainer>
       <Tab.Navigator>
-        {/* <Tab.Screen
+        <Tab.Screen
           name="Home"
           component={HomeStack}
           options={{
@@ -30,16 +29,7 @@ export default function App() {
             tabBarIcon: ({ color, size})=>(
               <MaterialCommunityIcons name="home" color={color} size={size}/>
             )
-          }}/> */}
-        <Tab.Screen
-          name="ApiFake"
-          component={ApiFake}
-          options={{
-            tabBarLabel: "Inicio",
-            tabBarIcon: ({ color, size})=>(
-              <MaterialCommunityIcons name="home" color={color} size={size}/>
-            )
-        }}/>
+          }}/>
       </Tab.Navigator>
     </NavigationContainer>
   );
