@@ -11,6 +11,15 @@ const WelcomeSlide = () => {
   const goToLogin = () => {
     navigation.navigate("Login");
   };
+  const goToAxios = () => {
+    navigation.navigate("Axios");
+  };
+  const goToAxiosPokemon = () => {
+    navigation.navigate("AxiosPokemon");
+  };
+  const goToAxiosMovies = () => {
+    navigation.navigate("AxiosMovies");
+  };
 
   const Slide1 = () => {
     return (
@@ -38,10 +47,18 @@ const WelcomeSlide = () => {
         <ImageBackground
           source={require("./images/Tablet.jpg")}
           style={styles.imgBackground}
-        >
-          <Button title="Registrarse" onPress={goToRegister} />
-          <Button title="Iniciar sesión" onPress={goToLogin} />
-        </ImageBackground>
+        ></ImageBackground>
+      </View>
+    );
+  };
+  const Slide4 = () => {
+    return (
+      <View>
+        <Button title="Registrarse" onPress={goToRegister} />
+        <Button title="Iniciar sesión" onPress={goToLogin} />
+        <Button title="Axios Productos" onPress={goToAxios} />
+        <Button title="Axios Pokemon" onPress={goToAxiosPokemon} />
+        <Button title="Axios Películas" onPress={goToAxiosMovies} />
       </View>
     );
   };
@@ -51,6 +68,7 @@ const WelcomeSlide = () => {
       <Slide1 />
       <Slide2 />
       <Slide3 />
+      <Slide4 />
     </Swiper>
   );
 };

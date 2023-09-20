@@ -4,6 +4,9 @@ import { Dimensions, StyleSheet } from 'react-native';
 import WelcomeSlide from '../screens/WelcomeSlide';
 import RegisterForm from '../screens/RegisterForm';
 import LoginForm from '../screens/LoginForm';
+import ApiFakeAxios from '../screens/ApiFakeAxios';
+import ApiPokemonAxios from '../screens/ApiPokemonAxios';
+import ApiMoviesAxios from '../screens/ApiMoviesAxios';
 
 
 const Stack = createStackNavigator();
@@ -51,6 +54,21 @@ const HomeStack = () => {
             name="Login"
             component={LoginForm}
             options={{ title: "Login" }} // Personaliza el título del encabezado
+        />
+        <Stack.Screen
+            name="Axios"
+            component={ApiFakeAxios}
+            options={{ title: "Axios" }} // Personaliza el título del encabezado
+        />
+        <Stack.Screen
+            name="AxiosPokemon"
+            component={ApiPokemonAxios}
+            options={{ title: "AxiosPokemon" }} // Personaliza el título del encabezado
+        />
+        <Stack.Screen
+            name="AxiosMovies"
+            component={ApiMoviesAxios}
+            options={{ title: "AxiosMovies" }} // Personaliza el título del encabezado
         />
     </Stack.Navigator>
   )
