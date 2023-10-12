@@ -7,6 +7,7 @@ import LoginForm from '../screens/LoginForm';
 import ApiFakeAxios from '../screens/ApiFakeAxios';
 import ApiPokemonAxios from '../screens/ApiPokemonAxios';
 import ApiMoviesAxios from '../screens/ApiMoviesAxios';
+import Posts from '../components/Posts';
 
 
 const Stack = createStackNavigator();
@@ -69,6 +70,11 @@ const HomeStack = () => {
             name="AxiosMovies"
             component={ApiMoviesAxios}
             options={{ title: "AxiosMovies" }} // Personaliza el título del encabezado
+        />
+        <Stack.Screen
+            name="Posts"
+            component={Posts}
+            options={{ title: "Posts" }} // Esto oculta el encabezado
         />
     </Stack.Navigator>
   )

@@ -11,15 +11,19 @@ const WelcomeSlide = () => {
   const goToLogin = () => {
     navigation.navigate("Login");
   };
-  const goToAxios = () => {
-    navigation.navigate("Axios");
-  };
-  const goToAxiosPokemon = () => {
-    navigation.navigate("AxiosPokemon");
-  };
-  const goToAxiosMovies = () => {
-    navigation.navigate("AxiosMovies");
-  };
+  // const goToAxios = () => {
+  //   navigation.navigate("Axios");
+  // };
+  // const goToAxiosPokemon = () => {
+  //   navigation.navigate("AxiosPokemon");
+  // };
+  // const goToAxiosMovies = () => {
+  //   navigation.navigate("AxiosMovies");
+  // };
+
+  const goToPost = () => {
+    navigation.navigate("Posts");
+  }
 
   const Slide1 = () => {
     return (
@@ -56,6 +60,7 @@ const WelcomeSlide = () => {
       <View>
         <Button title="Registrarse" onPress={goToRegister} />
         <Button title="Iniciar sesión" onPress={goToLogin} />
+        <Button title="Posts" onPress={goToPost} />
         {/* <Button title="Axios Productos" onPress={goToAxios} />
         <Button title="Axios Pokemon" onPress={goToAxiosPokemon} />
         <Button title="Axios Películas" onPress={goToAxiosMovies} /> */}

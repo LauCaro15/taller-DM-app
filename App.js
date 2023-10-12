@@ -64,6 +64,7 @@ export default function App() {
               <MaterialCommunityIcons name="film" color={color} size={size}/>
             )
           }}/>
+          
       </Tab.Navigator>
     </NavigationContainer>
   );
