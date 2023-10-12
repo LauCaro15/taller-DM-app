@@ -19,7 +19,7 @@ const Posts = () => {
         title: 'Prueba estatica',
         subtitle: '1',
         description: '1',
-        avatar: '1',
+        avatar: 'https://s1.ppllstatics.com/lasprovincias/www/multimedia/202112/12/media/cortadas/gatos-kb2-U160232243326NVC-1248x770@Las%20Provincias.jpg',
         active: false,
     }]
 
@@ -32,7 +32,7 @@ const Posts = () => {
         active: false
     })
 
-    const ip = "127.0.0.1";
+    const ip = "192.168.158.72";
 
     const handleCreatePost = () => {
         console.log("Post: ", newPost);
@@ -55,7 +55,7 @@ const Posts = () => {
         setPostList(updatePosts);
 
         axios
-            .delete(`http://${ip}:3000/api/v1/posts/${postId}}`)
+            .delete(`http://${ip}:3000/api/v1/posts/${postId}`)
             .then(response => {
                 console.log("Data delete post: ",response.data)
             })
@@ -85,7 +85,7 @@ const Posts = () => {
         <View>
             
             <FlatList
-            data = {postList2}
+            data = {postList}
             columnWrapperStyle={{ flexWrap: 'wrap', flex: 1 , justifyContent: 'center'}}
             numColumns={25}
             style = {{ margin: 5 }}
@@ -98,7 +98,7 @@ const Posts = () => {
                     <Text style={[ styles.cardText ]}>{ item.subtitle }</Text>
                     <Text style={[ styles.cardText ]}>{ item.description }</Text>
                     <Text style={[ styles.cardText ]}>{ (item.active) ? "Activo" : "Inactivo" }</Text>
-                    <Button title="Delete" onPress={()=>handleDeletePost(item._id)}/>
+                    <Button title="Delete" style={styles.button} onPress={()=>handleDeletePost(item._id.toString())}/>
                 </Surface>
             )}
             />
@@ -109,7 +109,7 @@ const Posts = () => {
             <Button
                 onPress={() => setModalVisible(true)}
                 title="Add Post"
-                color="#841584"
+                style={styles.button}
             /> 
 
             <Modal 
@@ -157,6 +157,7 @@ const Posts = () => {
                     <Button 
                     title='Create'
                     onPress={handleCreatePost}
+                    style={styles.button}
                     />    
                     
                 </View>
@@ -201,7 +202,10 @@ const styles = StyleSheet.create({
     cardTitle: {
         fontWeight: 'bold',
         fontSize: 18,
-      }
+      },
+    button: {
+        color : "#841584"
+    }
 
 })
 
