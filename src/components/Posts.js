@@ -2,7 +2,8 @@ import { Button, Surface } from '@react-native-material/core';
 import axios from 'axios';
 import React, { useEffect, useState} from 'react'
 import { FlatList, Text, View, Image, Modal, StyleSheet } from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Posts = () => {
 
@@ -12,7 +13,7 @@ const Posts = () => {
         title: 'Prueba estatica',
         subtitle: '1',
         description: '1',
-        avatar: '1',
+        avatar: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
         active: false
     },{
         _id: 1,
@@ -82,7 +83,7 @@ const Posts = () => {
     
   return (
     <View style={{flex:1, alignContent: 'center', justifyContent: 'space-between' }}>
-        <View>
+        <View style={{flex:1}}>
             
             <FlatList
             data = {postList}
@@ -93,24 +94,30 @@ const Posts = () => {
             renderItem = {({ item }) => (
                 <Surface elevation={4}
                 style={ [styles.card ]}>
-                    <Image source = {{ uri: item.avatar }} style = {{ width: 50 }}/>
+                    <Image source = {{ uri: item.avatar }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                     <Text style={[ styles.cardText , styles.cardTitle ]}>{ item.title }</Text>
                     <Text style={[ styles.cardText ]}>{ item.subtitle }</Text>
                     <Text style={[ styles.cardText ]}>{ item.description }</Text>
                     <Text style={[ styles.cardText ]}>{ (item.active) ? "Activo" : "Inactivo" }</Text>
                     <Button title="Delete" style={styles.button} onPress={()=>handleDeletePost(item._id.toString())}/>
-                </Surface>
-            )}
-            />
 
+                </Surface>
+
+            )}
+            >
+
+            </FlatList>
+            
         </View>
-        
-        <View>
-            <Button
+        <Button
                 onPress={() => setModalVisible(true)}
                 title="Add Post"
                 style={styles.button}
-            /> 
+        /> 
+
+        
+        <View>
+            
 
             <Modal 
             visible={modalVisible} 
@@ -185,6 +192,7 @@ const styles = StyleSheet.create({
         alignContent: 'center'
     },
     card: {
+        backgroundColor: '#E6EAE8',
         justifyContent: "center",
         alignItems: "center",
         margin: 5,

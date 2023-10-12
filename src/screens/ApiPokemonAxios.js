@@ -14,7 +14,7 @@ export const ApiPokemonAxios = () => {
             .get("https://taller-dm-production.up.railway.app/api/v1/pokemons/list-pokemons")
             .then((response) =>{
                 setPokemons(response.data);
-                //console.log(response.data);
+                console.log(response.data);
             })
             .catch((error) =>  {
                 console.error("Error al obtener los datos:", error);
