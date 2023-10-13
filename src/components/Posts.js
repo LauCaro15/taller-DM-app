@@ -3,7 +3,6 @@ import axios from 'axios';
 import React, { useEffect, useState} from 'react'
 import { FlatList, Text, View, Image, Modal, StyleSheet } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Posts = () => {
 

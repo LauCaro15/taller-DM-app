@@ -21,6 +21,10 @@ const WelcomeSlide = () => {
   //   navigation.navigate("AxiosMovies");
   // };
 
+  const goToImagePicker = () => {
+    navigation.navigate("ImagePicker");
+  };
+
   const goToPost = () => {
     navigation.navigate("Posts");
   }
@@ -61,6 +65,7 @@ const WelcomeSlide = () => {
         <Button title="Registrarse" onPress={goToRegister} />
         <Button title="Iniciar sesión" onPress={goToLogin} />
         <Button title="Posts" onPress={goToPost} />
+        <Button title="ImagePicker" onPress={goToImagePicker} />
         {/* <Button title="Axios Productos" onPress={goToAxios} />
         <Button title="Axios Pokemon" onPress={goToAxiosPokemon} />
         <Button title="Axios Películas" onPress={goToAxiosMovies} /> */}
