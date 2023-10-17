@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { useEffect, useState} from 'react'
 import { FlatList, Text, View, Image, Modal, StyleSheet } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import ImagePickerExample from './ImagePicker';
 
 const Posts = () => {
 
@@ -32,21 +33,30 @@ const Posts = () => {
         active: false
     })
 
-    const ip = "192.168.158.72";
+    const ip = "192.168.20.20";
 
     const handleCreatePost = () => {
-        console.log("Post: ", newPost);
+        const formData = new FormData();
+        formData.append("title", newPost.title);
+        formData.append("subtitle", newPost.subtitle);
+        formData.append("description", newPost.description);
+        formData.append("avatar", {
+            uri: newPost.avatar,
+            type: "image/jpeg", // Modify the type based on your image type
+            name: "avatar.jpg", // Modify the name based on your image name
+        });
+        console.log("Post: ", formData);
         axios
-            .post(`http://${ip}:3000/api/v1/posts/new-post`, newPost)
+            .post(`http://${ip}:3000/api/v1/posts/new-post`, formData)
             .then(response => {
                 console.log("Data new post: ",response.data)
-                
+
                 setModalVisible(false)
             })
             .catch((error) => {
                 console.log(error)
             })
-        
+
     }
 
     const handleDeletePost = (postId) => {
@@ -61,8 +71,12 @@ const Posts = () => {
             })
             .catch((error) => {
                 console.log(error)
-            }) 
+            })
     }
+
+    const handleImageSelection = (selectedImage) => {
+        setNewPost({...newPost, avatar: selectedImage.uri});
+    };
 
     const listPosts = () => {
         axios
@@ -79,11 +93,11 @@ const Posts = () => {
     useEffect(() => {
         listPosts();
     }, [postList]);
-    
+
   return (
     <View style={{flex:1, alignContent: 'center', justifyContent: 'space-between' }}>
         <View style={{flex:1}}>
-            
+
             <FlatList
             data = {postList}
             columnWrapperStyle={{ flexWrap: 'wrap', flex: 1 , justifyContent: 'center'}}
@@ -93,33 +107,32 @@ const Posts = () => {
             renderItem = {({ item }) => (
                 <Surface elevation={4}
                 style={ [styles.card ]}>
-                    <Image source = {{ uri: item.avatar }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+                    <Image source = {{ uri: `http://${ip}:3000/${item.avatar}` }} style={{ width: 100, height: 100, borderRadius: 50 }} />
                     <Text style={[ styles.cardText , styles.cardTitle ]}>{ item.title }</Text>
                     <Text style={[ styles.cardText ]}>{ item.subtitle }</Text>
                     <Text style={[ styles.cardText ]}>{ item.description }</Text>
                     <Text style={[ styles.cardText ]}>{ (item.active) ? "Activo" : "Inactivo" }</Text>
                     <Button title="Delete" style={styles.button} onPress={()=>handleDeletePost(item._id.toString())}/>
-
                 </Surface>
 
             )}
             >
 
             </FlatList>
-            
+
         </View>
         <Button
                 onPress={() => setModalVisible(true)}
                 title="Add Post"
                 style={styles.button}
-        /> 
+        />
 
-        
+
         <View>
-            
 
-            <Modal 
-            visible={modalVisible} 
+
+            <Modal
+            visible={modalVisible}
             onRequestClose={() => setModalVisible(false)}
             animationType='slide'
             >
@@ -132,7 +145,7 @@ const Posts = () => {
                             setNewPost({...newPost, title: title_text})
                         }}
                     />
-                    
+
                     <TextInput
                         placeholder="Subtitle"
                         style={styles.input}
@@ -143,34 +156,27 @@ const Posts = () => {
                     />
 
                     <TextInput
-                        placeholder="Avatar"
-                        style={styles.input}
-                        onChangeText={ (url_avatar) => {
-                            console.log(url_avatar)
-                            setNewPost({...newPost, avatar: url_avatar})
-                        }}
-                    />
-
-                    <TextInput
                         placeholder="Description"
                         style={styles.input}
                         onChangeText={ (description_text) => {
                             console.log(description_text)
                             setNewPost({...newPost, description: description_text})
                         }}
-                    />                    
+                    />
 
-                    <Button 
+                    <ImagePickerExample onImageSelect={handleImageSelection}/>
+
+                    <Button
                     title='Create'
                     onPress={handleCreatePost}
                     style={styles.button}
-                    />    
-                    
+                    />
+
                 </View>
             </Modal>
         </View>
 
-        
+
     </View>
   )
 }
@@ -199,9 +205,9 @@ const styles = StyleSheet.create({
         borderRadius: 5
       } ,
     cardText: {
-        flex: 1, 
-        flexWrap: 'wrap' , 
-        width: 350, 
+        flex: 1,
+        flexWrap: 'wrap' ,
+        width: 350,
         textAlign: 'center',
         marginBottom: 5,
         fontSize: 15,
