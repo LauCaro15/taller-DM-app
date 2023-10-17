@@ -7,12 +7,11 @@ import LoginForm from '../screens/LoginForm';
 import ApiFakeAxios from '../screens/ApiFakeAxios';
 import ApiPokemonAxios from '../screens/ApiPokemonAxios';
 import ApiMoviesAxios from '../screens/ApiMoviesAxios';
-import Posts from '../components/Posts';
-import ImagePicker from '../components/ImagePicker';
+
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const ProductStack = () => {
     const [orientation, setOrientation] = useState(null);
 
     const handleOrientationChange = ({ window: { width, height } }) => {
@@ -33,7 +32,7 @@ const HomeStack = () => {
 
   return (
     <Stack.Navigator
-    initialRouteName="Welcome"
+    initialRouteName="Products"
     screenOptions={{
         headerStyle:
         orientation === "Portrait"
@@ -41,7 +40,7 @@ const HomeStack = () => {
             : styles.headerStyleLandscape,
             headerTintColor: "#fff",}}
     >
-        <Stack.Screen
+        {/* <Stack.Screen
             name="Welcome"
             component={WelcomeSlide}
             options={{ headerShown: false }} // Esto oculta el encabezado
@@ -55,32 +54,22 @@ const HomeStack = () => {
             name="Login"
             component={LoginForm}
             options={{ title: "Login" }} // Personaliza el título del encabezado
-        />
+        /> */}
         <Stack.Screen
             name="Axios"
             component={ApiFakeAxios}
-            options={{ title: "Axios" }} // Personaliza el título del encabezado
+            options={{ title: "Axios Products" }} // Personaliza el título del encabezado
         />
-        <Stack.Screen
+        {/* <Stack.Screen
             name="AxiosPokemon"
             component={ApiPokemonAxios}
-            options={{ title: "AxiosPokemon" }} // Personaliza el título del encabezado
-        />
-        <Stack.Screen
+            options={{ title: "Axios Pokemon" }} // Personaliza el título del encabezado
+        /> */}
+        {/* <Stack.Screen
             name="AxiosMovies"
             component={ApiMoviesAxios}
             options={{ title: "AxiosMovies" }} // Personaliza el título del encabezado
-        />
-        <Stack.Screen
-            name="Posts"
-            component={Posts}
-            options={{ title: "Posts" }} // Esto oculta el encabezado
-        />
-        <Stack.Screen
-            name="ImagePicker"
-            component={ImagePicker}
-            options={{ title: "ImagePicker" }} // Esto oculta el encabezado
-        />
+        /> */}
     </Stack.Navigator>
   )
 }
@@ -102,4 +91,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeStack
+export default ProductStack
