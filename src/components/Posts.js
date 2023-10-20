@@ -1,13 +1,17 @@
 import { Button, Surface } from '@react-native-material/core';
 import axios from 'axios';
 import React, { useEffect, useState} from 'react'
-import { FlatList, Text, View, Image, Modal, StyleSheet } from 'react-native';
+import { FlatList, Text, View, Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ImagePickerExample from './ImagePicker';
+import TakePhoto from './TakePhoto';
+import * as ImagePicker from 'expo-image-picker';
 
 const Posts = () => {
+    const [image, setImage] = useState(null);
     const [postList, setPostList] = useState([]);
     const postList2 = [{
+
         _id: 1,
         title: 'Prueba estatica',
         subtitle: '1',
@@ -32,7 +36,7 @@ const Posts = () => {
         active: false
     })
 
-    const ip = "192.168.20.20";
+    const ip = "192.168.1.8";
 
     const handleCreatePost = () => {
         const formData = new FormData();
@@ -75,6 +79,7 @@ const Posts = () => {
 
     const handleImageSelection = (selectedImage) => {
         setNewPost({...newPost, avatar: selectedImage.uri});
+        setImage(selectedImage);
     };
 
     const listPosts = () => {
@@ -162,8 +167,12 @@ const Posts = () => {
                         }}
                     />
 
+                    
                     <ImagePickerExample onImageSelect={handleImageSelection}/>
+                    <TakePhoto onImageSelect={handleImageSelection}/>
 
+                    {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
+                    
                     <Button
                         title='Create'
                         onPress={handleCreatePost}
