@@ -6,7 +6,6 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ImagePickerExample from './ImagePicker';
 
 const Posts = () => {
-
     const [postList, setPostList] = useState([]);
     const postList2 = [{
         _id: 1,
@@ -99,42 +98,41 @@ const Posts = () => {
         <View style={{flex:1}}>
 
             <FlatList
-            data = {postList}
-            columnWrapperStyle={{ flexWrap: 'wrap', flex: 1 , justifyContent: 'center'}}
-            numColumns={25}
-            style = {{ margin: 5 }}
-            keyExtractor = {( item ) => item._id.toString()}
-            renderItem = {({ item }) => (
-                <Surface elevation={4}
-                style={ [styles.card ]}>
-                    <Image source = {{ uri: `http://${ip}:3000/${item.avatar}` }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-                    <Text style={[ styles.cardText , styles.cardTitle ]}>{ item.title }</Text>
-                    <Text style={[ styles.cardText ]}>{ item.subtitle }</Text>
-                    <Text style={[ styles.cardText ]}>{ item.description }</Text>
-                    <Text style={[ styles.cardText ]}>{ (item.active) ? "Activo" : "Inactivo" }</Text>
-                    <Button title="Delete" style={styles.button} onPress={()=>handleDeletePost(item._id.toString())}/>
-                </Surface>
+                data = {postList}
+                columnWrapperStyle={{ flexWrap: 'wrap', flex: 1 , justifyContent: 'center'}}
+                numColumns={25}
+                style = {{ margin: 5 }}
+                keyExtractor = {( item ) => item._id.toString()}
+                renderItem = {({ item }) => (
+                    <Surface elevation={4}
+                        style={ [styles.card ]}
+                    >
+                        <Image source = {{ uri: `http://${ip}:3000/${item.avatar}` }} style={{ width: 100, height: 100, borderRadius: 50 }} />
+                        <Text style={[ styles.cardText , styles.cardTitle ]}>{ item.title }</Text>
+                        <Text style={[ styles.cardText ]}>{ item.subtitle }</Text>
+                        <Text style={[ styles.cardText ]}>{ item.description }</Text>
+                        <Text style={[ styles.cardText ]}>{ (item.active) ? "Activo" : "Inactivo" }</Text>
+                        <Button title="Delete" style={styles.button} onPress={()=>handleDeletePost(item._id.toString())}/>
+                    </Surface>
 
-            )}
+                )}
             >
 
             </FlatList>
 
         </View>
         <Button
-                onPress={() => setModalVisible(true)}
-                title="Add Post"
-                style={styles.button}
+            onPress={() => setModalVisible(true)}
+            title="Add Post"
+            style={styles.button}
         />
-
 
         <View>
 
-
             <Modal
-            visible={modalVisible}
-            onRequestClose={() => setModalVisible(false)}
-            animationType='slide'
+                visible={modalVisible}
+                onRequestClose={() => setModalVisible(false)}
+                animationType='slide'
             >
                 <View style={styles.modalContainer}>
                     <TextInput
@@ -167,16 +165,13 @@ const Posts = () => {
                     <ImagePickerExample onImageSelect={handleImageSelection}/>
 
                     <Button
-                    title='Create'
-                    onPress={handleCreatePost}
-                    style={styles.button}
+                        title='Create'
+                        onPress={handleCreatePost}
+                        style={styles.button}
                     />
-
                 </View>
             </Modal>
         </View>
-
-
     </View>
   )
 }

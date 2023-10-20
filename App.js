@@ -14,6 +14,7 @@ import ApiPokemonAxios from "./src/screens/ApiPokemonAxios";
 import PokemonStack from "./src/stack/PokemonStack";
 import ProductStack from "./src/stack/ProductStack";
 import MovieStack from "./src/stack/MovieStack";
+import MainNavigator from "./MainNavigator";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,47 +26,8 @@ export default function App() {
   };
 
   return (
-    
-    <NavigationContainer> 
-      <Tab.Navigator>
-        <Tab.Screen
-          name="Home"
-          component={HomeStack}
-          options={{
-            tabBarLabel: "Inicio",
-            tabBarIcon: ({ color, size})=>(
-              <MaterialCommunityIcons name="home" color={color} size={size}/>
-            )
-          }}/>
-          <Tab.Screen
-          name="Products"
-          component={ProductStack}
-          options={{
-            tabBarLabel: "Products",
-            tabBarIcon: ({ color, size})=>(
-              <MaterialCommunityIcons name="purse" color={color} size={size}/>
-            )
-          }}/>
-          <Tab.Screen
-          name="Pokemon"
-          component={PokemonStack}
-          options={{
-            tabBarLabel: "Pokemon",
-            tabBarIcon: ({ color, size})=>(
-              <MaterialCommunityIcons name="pokemon-go" color={color} size={size}/>
-            )
-          }}/>
-          <Tab.Screen
-          name="Movies"
-          component={MovieStack}
-          options={{
-            tabBarLabel: "Movies",
-            tabBarIcon: ({ color, size})=>(
-              <MaterialCommunityIcons name="film" color={color} size={size}/>
-            )
-          }}/>
-          
-      </Tab.Navigator>
+    <NavigationContainer>
+      <MainNavigator></MainNavigator>
     </NavigationContainer>
   );
 }
