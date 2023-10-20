@@ -8,9 +8,10 @@ import TakePhoto from './TakePhoto';
 import * as ImagePicker from 'expo-image-picker';
 
 const Posts = () => {
-
+    const [image, setImage] = useState(null);
     const [postList, setPostList] = useState([]);
     const postList2 = [{
+
         _id: 1,
         title: 'Prueba estatica',
         subtitle: '1',
@@ -78,6 +79,7 @@ const Posts = () => {
 
     const handleImageSelection = (selectedImage) => {
         setNewPost({...newPost, avatar: selectedImage.uri});
+        setImage(selectedImage);
     };
 
     const listPosts = () => {
@@ -168,8 +170,9 @@ const Posts = () => {
 
                     
                     <ImagePickerExample onImageSelect={handleImageSelection}/>
-                    {/* <TakePhoto onImageSelect={handleImageSelection}/> */}
-                    <TakePhoto/>
+                    <TakePhoto onImageSelect={handleImageSelection}/>
+
+                    {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
                     
                     <Button
                     title='Create'
