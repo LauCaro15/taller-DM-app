@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Image, View, Platform, Modal, StyleSheet, TextInput, FlatList, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
-import ImagePickerExample from './ImagePickerM';
+import ImagePickerExample from './ImagePicker';
 import TakePhoto from './TakePhoto';
 import { Surface } from '@react-native-material/core';
 

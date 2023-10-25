@@ -8,7 +8,7 @@ import ApiFakeAxios from '../screens/ApiFakeAxios';
 import ApiPokemonAxios from '../screens/ApiPokemonAxios';
 import ApiMoviesAxios from '../screens/ApiMoviesAxios';
 import Posts from '../components/Posts';
-import ImagePickerM from '../components/ImagePickerM';
+import ImagePicker from '../components/ImagePicker';
 
 const Stack = createStackNavigator();
 
@@ -78,7 +78,7 @@ const HomeStack = () => {
         />
         <Stack.Screen
             name="ImagePicker"
-            component={ImagePickerM}
+            component={ImagePicker}
             options={{ title: "ImagePickerM" }} // Esto oculta el encabezado
         />
     </Stack.Navigator>
