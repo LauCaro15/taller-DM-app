@@ -23,7 +23,7 @@ const LoginForm = () => {
         "Inicio de sesión exitoso",
         "¡Bienvenido! Por favor, inicia sesión para continuar."
       );
-      navigation.navigate("MainMenu");
+      navigation.navigate("Posts");
     } catch (error) {
       console.error("Error de inicio de sesión:", error);
       Alert.alert(
@@ -32,23 +32,32 @@ const LoginForm = () => {
       );
     }
   };
+  const goToRegister = () => {
+    navigation.navigate("Registro");
+  }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={text => setEmail(text)}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        secureTextEntry={true}
-        onChangeText={text => setPassword(text)}
-        value={password}
-      />
-      <Button title="Iniciar Sesión" onPress={handleLogin} />
+      <View>
+        <Text style={styles.title}>Iniciar Sesión</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={text => setEmail(text)}
+          value={email}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          secureTextEntry={true}
+          onChangeText={text => setPassword(text)}
+          value={password}
+        />
+        <Button title="Iniciar Sesión" onPress={handleLogin} />
+      </View>
+      <View>
+        <Text style={styles.text}>¿No tienes una cuenta?</Text>
+        <Button title="Registrarse" onPress={goToRegister} />
+      </View>
     </View>
   );
 };
@@ -58,11 +67,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 20,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: 10,
+
   },
   input: {
     width: 300,

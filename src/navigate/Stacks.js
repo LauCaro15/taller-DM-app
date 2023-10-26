@@ -1,18 +1,19 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
-import WelcomeSlide from '../screens/WelcomeSlide';
+
+import Products from "../screens/Products"
+import Pokemons from "../screens/Pokemons"
+import Home from "../screens/Home"
+import Movies from "../screens/Movies"
+import Posts from "../screens/Posts"
 import RegisterForm from '../screens/RegisterForm';
 import LoginForm from '../screens/LoginForm';
-import ApiFakeAxios from '../screens/ApiFakeAxios';
-import ApiPokemonAxios from '../screens/ApiPokemonAxios';
-import ApiMoviesAxios from '../screens/ApiMoviesAxios';
-import Posts from '../components/Posts';
-import ImagePicker from '../components/ImagePicker';
+// import MainNavigator from './MainNavigator';
 
 const Stack = createStackNavigator();
 
-const HomeStack = () => {
+const Stacks = () => {
     const [orientation, setOrientation] = useState(null);
 
     const handleOrientationChange = ({ window: { width, height } }) => {
@@ -33,17 +34,11 @@ const HomeStack = () => {
 
   return (
     <Stack.Navigator
-    initialRouteName="Welcome"
-    screenOptions={{
-        headerStyle:
-        orientation === "Portrait"
-            ? styles.headerStylePortrait
-            : styles.headerStyleLandscape,
-            headerTintColor: "#fff",}}
+    initialRouteName="Login"    
     >
         <Stack.Screen
-            name="Welcome"
-            component={WelcomeSlide}
+            name="Home"
+            component={Home}
             options={{ headerShown: false }} // Esto oculta el encabezado
         />
         <Stack.Screen
@@ -57,31 +52,28 @@ const HomeStack = () => {
             options={{ title: "Login" }} // Personaliza el título del encabezado
         />
         <Stack.Screen
-            name="Axios"
-            component={ApiFakeAxios}
-            options={{ title: "Axios" }} // Personaliza el título del encabezado
+            name="Products"
+            component={Products}
+            options={{ title: "Products" }} // Personaliza el título del encabezado
         />
         <Stack.Screen
-            name="AxiosPokemon"
-            component={ApiPokemonAxios}
-            options={{ title: "AxiosPokemon" }} // Personaliza el título del encabezado
+            name="Pokemons"
+            component={Pokemons}
+            options={{ title: "Pokemons" }} 
         />
         <Stack.Screen
-            name="AxiosMovies"
-            component={ApiMoviesAxios}
-            options={{ title: "AxiosMovies" }} // Personaliza el título del encabezado
+            name="Movies"
+            component={Movies}
+            options={{ title: "Movies" }} 
         />
         <Stack.Screen
             name="Posts"
             component={Posts}
-            options={{ title: "Posts" }} // Esto oculta el encabezado
+            options={{ title: "Posts" }} 
         />
-        <Stack.Screen
-            name="ImagePicker"
-            component={ImagePicker}
-            options={{ title: "ImagePicker" }} // Esto oculta el encabezado
-        />
+        
     </Stack.Navigator>
+
   )
 }
 
@@ -102,4 +94,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeStack
+export default Stacks

@@ -3,8 +3,8 @@ import axios from 'axios';
 import React, { useEffect, useState} from 'react'
 import { FlatList, Text, View, Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
 import { ScrollView, TextInput } from 'react-native-gesture-handler';
-import ImagePickerExample from './ImagePicker';
-import TakePhoto from './TakePhoto';
+import ImagePickerExample from '../components/ImagePicker';
+import TakePhoto from '../components/TakePhoto';
 import * as ImagePicker from 'expo-image-picker';
 
 const Posts = () => {
