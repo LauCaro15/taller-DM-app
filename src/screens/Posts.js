@@ -1,4 +1,6 @@
-import { Button, Surface } from '@react-native-material/core';
+import React, { useState, useEffect } from 'react';
+import {Image, View, Platform, Modal, StyleSheet, TextInput, FlatList, Text } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import React, { useEffect, useState} from 'react'
 import { FlatList, Text, View, Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
@@ -6,35 +8,19 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ImagePickerExample from '../components/ImagePicker';
 import TakePhoto from '../components/TakePhoto';
 import * as ImagePicker from 'expo-image-picker';
+import { Surface } from '@react-native-material/core';
 
 const Posts = () => {
-    const [image, setImage] = useState(null);
+    const [images, setImages] = useState([]); // Para almacenar las imágenes seleccionadas
     const [postList, setPostList] = useState([]);
-    const postList2 = [{
-
-        _id: 1,
-        title: 'Prueba estatica',
-        subtitle: '1',
-        description: '1',
-        avatar: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
-        active: false
-    },{
-        _id: 1,
-        title: 'Prueba estatica',
-        subtitle: '1',
-        description: '1',
-        avatar: 'https://s1.ppllstatics.com/lasprovincias/www/multimedia/202112/12/media/cortadas/gatos-kb2-U160232243326NVC-1248x770@Las%20Provincias.jpg',
-        active: false,
-    }]
-
     const [modalVisible, setModalVisible] = useState(false);
     const [newPost, setNewPost] = useState({
         title: '',
         subtitle: '',
         description: '',
-        avatar: '',
+        avatar: [], // Utiliza un arreglo para las imágenes
         active: false
-    })
+    });
 
     const ip = "192.168.1.2";
 
@@ -43,10 +29,14 @@ const Posts = () => {
         formData.append("title", newPost.title);
         formData.append("subtitle", newPost.subtitle);
         formData.append("description", newPost.description);
-        formData.append("avatar", {
-            uri: newPost.avatar,
-            type: "image/jpeg", // Modify the type based on your image type
-            name: "avatar.jpg", // Modify the name based on your image name
+
+    // Agrega las imágenes seleccionadas al formulario
+        newPost.avatar.forEach((uri, index) => {
+            formData.append("avatar", {
+                uri: uri,
+                type: "image/jpeg",
+                name: "avatar.jpg",
+            });
         });
         console.log("Post: ", formData);
         const url = `http://${ip}:3000/api/v1/posts/new-post`;
@@ -86,9 +76,12 @@ const Posts = () => {
             })
     }
 
-    const handleImageSelection = (selectedImage) => {
-        setNewPost({...newPost, avatar: selectedImage.uri});
-        setImage(selectedImage);
+    const handleImageSelection = (selectedImages) => {
+        if (selectedImages) {
+          const avatarUris = selectedImages.map((image) => image.uri);
+          setNewPost({ ...newPost, avatar: avatarUris });
+          setImages(selectedImages);
+        }
     };
 
     const listPosts = () => {
@@ -125,17 +118,24 @@ const Posts = () => {
                 style = {{ margin: 5 }}
                 keyExtractor = {( item ) => item._id.toString()}
                 renderItem = {({ item }) => (
-                    <Surface elevation={4}
-                        style={ [styles.card ]}
-                    >
-                        <Image source = {{ uri: `http://${ip}:3000/${item.avatar}` }} style={{ width: 100, height: 100, borderRadius: 50 }} />
-                        <Text style={[ styles.cardText , styles.cardTitle ]}>{ item.title }</Text>
-                        <Text style={[ styles.cardText ]}>{ item.subtitle }</Text>
-                        <Text style={[ styles.cardText ]}>{ item.description }</Text>
-                        <Text style={[ styles.cardText ]}>{ (item.active) ? "Activo" : "Inactivo" }</Text>
-                        <Button title="Delete" style={styles.button} onPress={()=>handleDeletePost(item._id.toString())}/>
+                    <Surface elevation={4} style={styles.card}>
+                        {item.avatar.map((avatarUri, index) => (
+                            <Image
+                                key={index} // Asegúrate de proporcionar una clave única para cada imagen
+                                source={{ uri: `http://${ip}:3000/${avatarUri}` }}
+                                style={{ width: 100, height: 100, borderRadius: 50, margin: 5 }}
+                            />
+                        ))}
+                        <Text style={[styles.cardText, styles.cardTitle]}>{item.title}</Text>
+                        <Text style={styles.cardText}>{item.subtitle}</Text>
+                        <Text style={styles.cardText}>{item.description}</Text>
+                        <Text style={styles.cardText}>{item.active ? "Activo" : "Inactivo"}</Text>
+                        <Button
+                            title="Delete"
+                            style={styles.button}
+                            onPress={() => handleDeletePost(item._id.toString())}
+                        />
                     </Surface>
-
                 )}
             >
 
@@ -183,12 +183,23 @@ const Posts = () => {
                         }}
                     />
 
-                    
                     <ImagePickerExample onImageSelect={handleImageSelection}/>
                     <TakePhoto onImageSelect={handleImageSelection}/>
 
-                    {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />}
-                    
+                    {/* {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */}
+                    {images && images.length > 0 && (
+                        <FlatList
+                            data={images}
+                            horizontal
+                            keyExtractor={(item) => item.uri}
+                            renderItem={({ item }) => (
+                                <Image
+                                    source={{ uri: item.uri }}
+                                    style={{ width: 100, height: 100, margin: 5 }}
+                                />
+                            )}
+                        />
+                    )}
                     <Button
                         title='Create'
                         onPress={handleCreatePost}
