@@ -79,7 +79,7 @@ const HomeStack = () => {
         <Stack.Screen
             name="ImagePicker"
             component={ImagePicker}
-            options={{ title: "ImagePicker" }} // Esto oculta el encabezado
+            options={{ title: "ImagePickerM" }} // Esto oculta el encabezado
         />
     </Stack.Navigator>
   )
