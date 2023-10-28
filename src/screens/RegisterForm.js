@@ -14,7 +14,7 @@ const RegisterForm = () => {
   navigator = useNavigation();
 
   const handleSubmit = () => {
-    const url = 'http://192.168.1.2:3000/api/v1/users/register';
+    const url = 'http://192.168.20.20:3000/api/v1/users/register';
 
     const data = {
       name: userName,
@@ -43,8 +43,8 @@ const RegisterForm = () => {
       .catch(error => {
         console.error('Error:', error);
       });
-    
-    
+
+
   };
 
   const goToLogin = () => {
@@ -55,10 +55,10 @@ const RegisterForm = () => {
     <View style = {styles.container}>
       <Text style = {styles.header}>Registro</Text>
       <View style = {styles.header}>
-        <TextInput 
+        <TextInput
           style = {styles.input}
-          placeholder = 'Nombre(s)' 
-          value = {userName} 
+          placeholder = 'Nombre(s)'
+          value = {userName}
           onChangeText = {setUserName}>
         </TextInput>
 
@@ -74,7 +74,7 @@ const RegisterForm = () => {
         <TextInput style = {styles.input} placeholder = 'Password' value = {password} onChangeText = {setPassword} secureTextEntry={true}></TextInput>
         <Button title = 'Registrarse' onPress = {handleSubmit} />
       </View>
-      
+
       <View>
         <Text style={styles.text}>¿Ya tienes una cuenta?</Text>
         <Button title="Iniciar sesión" onPress={goToLogin} />
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 10,
     textAlign: 'center',
-    
+
   },
   input: {
     marginBottom: 10,

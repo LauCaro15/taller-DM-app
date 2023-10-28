@@ -13,7 +13,7 @@ const LoginForm = () => {
     console.log("Password", password);
     try {
       const response = await fetch(
-        "http://192.168.1.2:3000/api/v1/users/login",
+        "http://192.168.20.20:3000/api/v1/users/login",
         {
           method: "POST",
           headers: {
@@ -30,7 +30,7 @@ const LoginForm = () => {
       console.log(response);
       Alert.alert(
         "Inicio de sesión exitoso",
-        "¡Bienvenido! Por favor, inicia sesión para continuar."
+        "¡Bienvenido!"
       );
       navigation.navigate("Posts");
     } catch (error) {

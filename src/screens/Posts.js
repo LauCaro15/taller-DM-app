@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import {Image, View, Platform, Modal, StyleSheet, TextInput, FlatList, Text } from 'react-native';
 import axios from 'axios';
-import React, { useEffect, useState} from 'react'
-import { FlatList, Text, View, Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
-import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ImagePickerExample from '../components/ImagePicker';
 import TakePhoto from '../components/TakePhoto';
 import * as ImagePicker from 'expo-image-picker';
@@ -21,7 +18,7 @@ const Posts = () => {
         active: false
     });
 
-    const ip = "192.168.1.2";
+    const ip = "192.168.20.20";
 
     const handleCreatePost = () => {
         const formData = new FormData();
@@ -39,7 +36,7 @@ const Posts = () => {
         });
         console.log("Post: ", formData);
         const url = `http://${ip}:3000/api/v1/posts/new-post`;
-        
+
         fetch(url, {
             method: 'POST',
             body: formData,
@@ -53,6 +50,7 @@ const Posts = () => {
             .then(data => {
               console.log("Data new post: ", data);
               setModalVisible(false);
+              setImages([]);
             })
             .catch(error => {
               console.log(error);
