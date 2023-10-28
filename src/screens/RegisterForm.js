@@ -14,21 +14,37 @@ const RegisterForm = () => {
   navigator = useNavigation();
 
   const handleSubmit = () => {
-    // axios.post('http://localhost:3000/api/v1/users/register', {
-    //   name: userName,
-    //   lastName: lastName,
-    //   email: email,
-    //   // password: documentNumber,
-      
-    // })
-    // .then(response => {
-    //   console.log(response.data);
-    // })
-    // .catch(error => {
-    //   console.log(error);
-    // });
+    const url = 'http://192.168.1.2:3000/api/v1/users/register';
+
+    const data = {
+      name: userName,
+      lastName: lastName,
+      email: email,
+      password: password,
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(responseData => {
+        console.log(responseData);
+        goToLogin();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
     
-    goToLogin();
+    
   };
 
   const goToLogin = () => {
@@ -37,9 +53,15 @@ const RegisterForm = () => {
 
   return (
     <View style = {styles.container}>
-      <Text style = {styles.header}>Formulario de Registro</Text>
+      <Text style = {styles.header}>Registro</Text>
       <View style = {styles.header}>
-        <TextInput style = {styles.input} placeholder = 'Nombre(s)' value = {userName} onChangeText = {setUserName}></TextInput>
+        <TextInput 
+          style = {styles.input}
+          placeholder = 'Nombre(s)' 
+          value = {userName} 
+          onChangeText = {setUserName}>
+        </TextInput>
+
         <TextInput style = {styles.input} placeholder = 'Apellidos' value = {lastName} onChangeText = {setLastName}></TextInput>
         {/* <Picker selectedValue = {documentType} onValueChange = {(itemSelected) => setDocumentType(itemSelected)}>
           <Picker.Item label = 'Cédula de Cuidadania' value = 'Cédula de Cuidadania' />

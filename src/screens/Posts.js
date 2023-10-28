@@ -36,7 +36,7 @@ const Posts = () => {
         active: false
     })
 
-    const ip = "192.168.1.8";
+    const ip = "192.168.1.2";
 
     const handleCreatePost = () => {
         const formData = new FormData();
@@ -49,16 +49,25 @@ const Posts = () => {
             name: "avatar.jpg", // Modify the name based on your image name
         });
         console.log("Post: ", formData);
-        axios
-            .post(`http://${ip}:3000/api/v1/posts/new-post`, formData)
+        const url = `http://${ip}:3000/api/v1/posts/new-post`;
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+          })
             .then(response => {
-                console.log("Data new post: ",response.data)
-
-                setModalVisible(false)
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
             })
-            .catch((error) => {
-                console.log(error)
+            .then(data => {
+              console.log("Data new post: ", data);
+              setModalVisible(false);
             })
+            .catch(error => {
+              console.log(error);
+            });
 
     }
 
@@ -83,15 +92,22 @@ const Posts = () => {
     };
 
     const listPosts = () => {
-        axios
-            .get(`http://${ip}:3000/api/v1/posts`)
-            .then( (response) => {
-                // console.log("Data posts: ", response.data)
-                setPostList(response.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        const url = `http://${ip}:3000/api/v1/posts`;
+
+        fetch(url)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log("Data posts: ", data);
+            setPostList(data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     useEffect(() => {

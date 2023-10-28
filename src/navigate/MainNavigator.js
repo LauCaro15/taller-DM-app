@@ -13,7 +13,7 @@ const Tab = createBottomTabNavigator();
 
 const MainNavigator = () => {
   return (
-    
+
     <Tab.Navigator
         initalRouteName="Home"
     >

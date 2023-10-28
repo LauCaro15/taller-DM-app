@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,16 +9,25 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const handleLogin = async () => {
+    console.log("Email", email);
+    console.log("Password", password);
     try {
-      const response = await axios.post(
-        "http://localhost:3500/api/v1/users/login",
+      const response = await fetch(
+        "http://192.168.1.2:3000/api/v1/users/login",
         {
-          email: email,
-          password: password,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
         }
       );
-      const accessToken = response.data.access;
-      await AsyncStorage.setItem("accessToken", accessToken);
+      // const accessToken = response.data.access;
+      // await AsyncStorage.setItem("accessToken", accessToken);
+      console.log(response);
       Alert.alert(
         "Inicio de sesión exitoso",
         "¡Bienvenido! Por favor, inicia sesión para continuar."
