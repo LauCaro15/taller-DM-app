@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import {Image, View, Platform, Modal, StyleSheet, TextInput, FlatList, Text } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import React, { useEffect, useState} from 'react'
 import { FlatList, Text, View, Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
@@ -8,7 +7,7 @@ import { ScrollView, TextInput } from 'react-native-gesture-handler';
 import ImagePickerExample from '../components/ImagePicker';
 import TakePhoto from '../components/TakePhoto';
 import * as ImagePicker from 'expo-image-picker';
-import { Surface } from '@react-native-material/core';
+import { Surface, Button } from '@react-native-material/core';
 
 const Posts = () => {
     const [images, setImages] = useState([]); // Para almacenar las imágenes seleccionadas
