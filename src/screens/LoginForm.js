@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Button} from 'react-native';
+import { View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -9,21 +9,30 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
   const handleLogin = async () => {
+    console.log("Email", email);
+    console.log("Password", password);
     try {
-      const response = await axios.post(
-        "http://localhost:3500/api/v1/users/login",
+      const response = await fetch(
+        "http://192.168.1.2:3000/api/v1/users/login",
         {
-          email: email,
-          password: password,
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
         }
       );
-      const accessToken = response.data.access;
-      await AsyncStorage.setItem("accessToken", accessToken);
+      // const accessToken = response.data.access;
+      // await AsyncStorage.setItem("accessToken", accessToken);
+      console.log(response);
       Alert.alert(
         "Inicio de sesión exitoso",
         "¡Bienvenido! Por favor, inicia sesión para continuar."
       );
-      navigation.navigate("MainMenu");
+      navigation.navigate("Posts");
     } catch (error) {
       console.error("Error de inicio de sesión:", error);
       Alert.alert(
@@ -32,23 +41,32 @@ const LoginForm = () => {
       );
     }
   };
+  const goToRegister = () => {
+    navigation.navigate("Registro");
+  }
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        onChangeText={text => setEmail(text)}
-        value={email}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        secureTextEntry={true}
-        onChangeText={text => setPassword(text)}
-        value={password}
-      />
-      <Button title="Iniciar Sesión" onPress={handleLogin} />
+      <View>
+        <Text style={styles.title}>Iniciar Sesión</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          onChangeText={text => setEmail(text)}
+          value={email}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          secureTextEntry={true}
+          onChangeText={text => setPassword(text)}
+          value={password}
+        />
+        <Button title="Iniciar Sesión" onPress={handleLogin} />
+      </View>
+      <View>
+        <Text style={styles.text}>¿No tienes una cuenta?</Text>
+        <Button title="Registrarse" onPress={goToRegister} />
+      </View>
     </View>
   );
 };
@@ -58,11 +76,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    gap: 20,
   },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
     marginBottom: 20,
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    marginBottom: 10,
+
   },
   input: {
     width: 300,

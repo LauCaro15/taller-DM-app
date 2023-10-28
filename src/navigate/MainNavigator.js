@@ -1,22 +1,25 @@
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React from 'react'
-import HomeStack from './src/stack/HomeStack';
-import ProductStack from './src/stack/ProductStack';
-import PokemonStack from './src/stack/PokemonStack';
-import MovieStack from './src/stack/MovieStack';
-import PostStacks from './src/stack/PostStacks';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+
+import Products from "../screens/Products"
+import Pokemons from "../screens/Pokemons"
+import Home from "../screens/Home"
+import Movies from "../screens/Movies"
+import Posts from "../screens/Posts"
+
 
 const Tab = createBottomTabNavigator();
 
 const MainNavigator = () => {
   return (
+
     <Tab.Navigator
-        initalRouteName='FirstScreen'
+        initalRouteName="Home"
     >
         <Tab.Screen
             name="Products"
-            component={ProductStack}
+            component={Products}
             options={{
                 tabBarLabel: "Products",
                 tabBarIcon: ({ color, size})=>(
@@ -25,8 +28,8 @@ const MainNavigator = () => {
             }}
         />
         <Tab.Screen
-            name="Pokemon"
-            component={PokemonStack}
+            name="Pokemons"
+            component={Pokemons}
             options={{
                 tabBarLabel: "Pokemon",
                 tabBarIcon: ({ color, size})=>(
@@ -36,17 +39,17 @@ const MainNavigator = () => {
         />
         <Tab.Screen
             name="Home"
-            component={HomeStack}
+            component={Home}
             options={{
                 tabBarLabel: "Inicio",
                 tabBarIcon: ({ color, size})=>(
                     <MaterialCommunityIcons name="home" color={color} size={size}/>
                 )
             }}
-        />
+        /> 
         <Tab.Screen
             name="Movies"
-            component={MovieStack}
+            component={Movies}
             options={{
                 tabBarLabel: "Movies",
                 tabBarIcon: ({ color, size})=>(
@@ -55,8 +58,8 @@ const MainNavigator = () => {
             }}
         />
         <Tab.Screen
-            name="PostStacks"
-            component={PostStacks}
+            name="Posts"
+            component={Posts}
             options={{
                 tabBarLabel: "Posts",
                 tabBarIcon: ({ color, size})=>(
@@ -65,6 +68,7 @@ const MainNavigator = () => {
             }}
         />
     </Tab.Navigator>
+
   )
 }
 

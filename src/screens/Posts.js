@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Image, View, Platform, Modal, StyleSheet, TextInput, FlatList, Text } from 'react-native';
-import * as ImagePicker from 'expo-image-picker';
+import {Image, View, Platform, Modal, StyleSheet, TextInput, FlatList, Text } from 'react-native';
 import axios from 'axios';
-import ImagePickerExample from './ImagePicker';
-import TakePhoto from './TakePhoto';
-import { Surface } from '@react-native-material/core';
+import React, { useEffect, useState} from 'react'
+import { FlatList, Text, View, Image, Modal, StyleSheet, TouchableOpacity } from 'react-native';
+import { ScrollView, TextInput } from 'react-native-gesture-handler';
+import ImagePickerExample from '../components/ImagePicker';
+import TakePhoto from '../components/TakePhoto';
+import * as ImagePicker from 'expo-image-picker';
+import { Surface, Button } from '@react-native-material/core';
 
 const Posts = () => {
     const [images, setImages] = useState([]); // Para almacenar las imágenes seleccionadas
@@ -18,7 +21,7 @@ const Posts = () => {
         active: false
     });
 
-    const ip = "192.168.20.20";
+    const ip = "192.168.1.2";
 
     const handleCreatePost = () => {
         const formData = new FormData();
@@ -34,18 +37,28 @@ const Posts = () => {
                 name: "avatar.jpg",
             });
         });
-
-        axios
-            .post(`http://${ip}:3000/api/v1/posts/new-post`, formData)
-            .then((response) => {
-                console.log("Data new post: ", response.data);
-                console.log(images);
-                setModalVisible(false);
+        console.log("Post: ", formData);
+        const url = `http://${ip}:3000/api/v1/posts/new-post`;
+        
+        fetch(url, {
+            method: 'POST',
+            body: formData,
+          })
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              return response.json();
             })
-            .catch((error) => {
-                console.log(error);
+            .then(data => {
+              console.log("Data new post: ", data);
+              setModalVisible(false);
+            })
+            .catch(error => {
+              console.log(error);
             });
-    };
+
+    }
 
     const handleDeletePost = (postId) => {
         console.log("Post ID: ", postId);
@@ -71,15 +84,22 @@ const Posts = () => {
     };
 
     const listPosts = () => {
-        axios
-            .get(`http://${ip}:3000/api/v1/posts`)
-            .then( (response) => {
-                // console.log("Data posts: ", response.data)
-                setPostList(response.data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        const url = `http://${ip}:3000/api/v1/posts`;
+
+        fetch(url)
+        .then(response => {
+            if (!response.ok) {
+            throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            // console.log("Data posts: ", data);
+            setPostList(data);
+        })
+        .catch(error => {
+            console.log(error);
+        });
     }
 
     useEffect(() => {

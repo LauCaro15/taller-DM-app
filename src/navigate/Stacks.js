@@ -1,17 +1,19 @@
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { useEffect, useState } from 'react';
 import { Dimensions, StyleSheet } from 'react-native';
-import WelcomeSlide from '../screens/WelcomeSlide';
+
+import Products from "../screens/Products"
+import Pokemons from "../screens/Pokemons"
+import Home from "../screens/Home"
+import Movies from "../screens/Movies"
+import Posts from "../screens/Posts"
 import RegisterForm from '../screens/RegisterForm';
 import LoginForm from '../screens/LoginForm';
-import ApiFakeAxios from '../screens/ApiFakeAxios';
-import ApiPokemonAxios from '../screens/ApiPokemonAxios';
-import ApiMoviesAxios from '../screens/ApiMoviesAxios';
-
+// import MainNavigator from './MainNavigator';
 
 const Stack = createStackNavigator();
 
-const MovieStack = () => {
+const Stacks = () => {
     const [orientation, setOrientation] = useState(null);
 
     const handleOrientationChange = ({ window: { width, height } }) => {
@@ -32,17 +34,11 @@ const MovieStack = () => {
 
   return (
     <Stack.Navigator
-    initialRouteName="Movies"
-    screenOptions={{
-        headerStyle:
-        orientation === "Portrait"
-            ? styles.headerStylePortrait
-            : styles.headerStyleLandscape,
-            headerTintColor: "#fff",}}
+    initialRouteName="Login"    
     >
-        {/* <Stack.Screen
-            name="Welcome"
-            component={WelcomeSlide}
+        <Stack.Screen
+            name="Home"
+            component={Home}
             options={{ headerShown: false }} // Esto oculta el encabezado
         />
         <Stack.Screen
@@ -56,21 +52,28 @@ const MovieStack = () => {
             options={{ title: "Login" }} // Personaliza el título del encabezado
         />
         <Stack.Screen
-            name="Axios"
-            component={ApiFakeAxios}
-            options={{ title: "Axios" }} // Personaliza el título del encabezado
-        /> */}
-        {/* <Stack.Screen
-            name="AxiosPokemon"
-            component={ApiPokemonAxios}
-            options={{ title: "Axios Pokemon" }} // Personaliza el título del encabezado
-        /> */}
-        <Stack.Screen
-            name="AxiosMovies"
-            component={ApiMoviesAxios}
-            options={{ title: "Axios Movies" }} // Personaliza el título del encabezado
+            name="Products"
+            component={Products}
+            options={{ title: "Products" }} // Personaliza el título del encabezado
         />
+        <Stack.Screen
+            name="Pokemons"
+            component={Pokemons}
+            options={{ title: "Pokemons" }} 
+        />
+        <Stack.Screen
+            name="Movies"
+            component={Movies}
+            options={{ title: "Movies" }} 
+        />
+        <Stack.Screen
+            name="Posts"
+            component={Posts}
+            options={{ title: "Posts" }} 
+        />
+        
     </Stack.Navigator>
+
   )
 }
 
@@ -91,4 +94,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MovieStack
+export default Stacks

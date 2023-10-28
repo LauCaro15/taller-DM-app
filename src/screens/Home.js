@@ -2,6 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Button, ImageBackground, StyleSheet, Text, View } from "react-native";
 import Swiper from "react-native-swiper";
+// import MainNavigator from "../navigate/MainNavigator";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 const WelcomeSlide = () => {
   const navigation = useNavigation();
@@ -66,9 +68,7 @@ const WelcomeSlide = () => {
         <Button title="Iniciar sesión" onPress={goToLogin} />
         <Button title="Posts" onPress={goToPost} />
         <Button title="ImagePicker" onPress={goToImagePicker} />
-        {/* <Button title="Axios Productos" onPress={goToAxios} />
-        <Button title="Axios Pokemon" onPress={goToAxiosPokemon} />
-        <Button title="Axios Películas" onPress={goToAxiosMovies} /> */}
+        
       </View>
     );
   };
