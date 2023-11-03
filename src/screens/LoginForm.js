@@ -13,7 +13,8 @@ const LoginForm = () => {
     console.log("Password", password);
     try {
       const response = await fetch(
-        "http://192.168.20.20:3000/api/v1/users/login",
+        /* "http://192.168.20.20:3000/api/v1/users/login" */
+        "http://mantenimientoandino.co:3000/api/v1/auth/login",
         {
           method: "POST",
           headers: {

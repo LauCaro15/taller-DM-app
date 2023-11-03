@@ -8,7 +8,7 @@ export default function ImagePickerExample({ onImageSelect }) {
   const pickImages = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsMultipleSelection: true, // Permite seleccionar múltiples imágenes
+      /* allowsMultipleSelection: true, */ // Permite seleccionar múltiples imágenes
       quality: 1,
     });
 

@@ -20,7 +20,6 @@ export default function PhotoPicker({ onImageSelect }) {
       }
     };
 
-
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
       <Button title="Take a photo" onPress={cameraLaunch} />
