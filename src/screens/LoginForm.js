@@ -22,18 +22,22 @@ const LoginForm = () => {
           },
           body: JSON.stringify({
             email: email,
-            password: password,
+            current_password: password,
           }),
         }
       );
-      // const accessToken = response.data.access;
-      // await AsyncStorage.setItem("accessToken", accessToken);
-      console.log(response);
+
+      const data = await response.json();
+      const accessToken = data.access;
+      await AsyncStorage.setItem("accessToken", accessToken);
+
+      console.log(accessToken);
+
       Alert.alert(
         "Inicio de sesión exitoso",
         "¡Bienvenido!"
       );
-      navigation.navigate("Posts");
+      navigation.navigate("Case1");
     } catch (error) {
       console.error("Error de inicio de sesión:", error);
       Alert.alert(

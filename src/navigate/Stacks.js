@@ -9,6 +9,7 @@ import Movies from "../screens/Movies"
 import Posts from "../screens/Posts"
 import RegisterForm from '../screens/RegisterForm';
 import LoginForm from '../screens/LoginForm';
+import Case1 from "../screens/Case1"
 // import MainNavigator from './MainNavigator';
 
 const Stack = createStackNavigator();
@@ -70,6 +71,11 @@ const Stacks = () => {
             name="Posts"
             component={Posts}
             options={{ title: "Posts" }} 
+        />
+        <Stack.Screen
+            name="Case1"
+            component={Case1}
+            options={{ title: "Case1" }} 
         />
         
     </Stack.Navigator>

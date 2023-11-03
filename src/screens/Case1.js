@@ -9,16 +9,19 @@ import {
 	FlatList,
 	Text,
 } from "react-native";
-import axios from "axios";
 import ImagePickerExample from "../components/ImagePicker";
 import TakePhoto from "../components/TakePhoto";
 import * as ImagePicker from "expo-image-picker";
 import { Surface, Button } from "@react-native-material/core";
 import { Switch } from "react-native";
+import { Picker } from "@react-native-picker/picker";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Case1 = () => {
-	const [images, setImages] = useState([]); // Para almacenar las imágenes seleccionadas
+	const accessToken = AsyncStorage.getItem("accessToken");
+	const [images, setImages] = useState(""); // Para almacenar las imágenes seleccionadas
 	const [postList, setPostList] = useState([]);
+
 	const [modalVisiblePost, setModalVisiblePost] = useState(false);
 	const [newPost, setNewPost] = useState({
 		titulo: "",
@@ -33,28 +36,76 @@ const Case1 = () => {
 		nombre: "",
 		active: false,
 	});
+	const [isActive, setIsActive] = useState(undefined);
+
+	const [categories, setCategories] = useState([]);
+	const [selectedCategory, setSelectedCategory] = useState(
+		"Categoría Seleccionada"
+	);
+	useEffect(() => {
+		const url ="http://mantenimientoandino.co:3000/api/v1/admin/categories";
+		fetch(url)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Error al obtener la página");
+				}
+				return response.json();
+			})
+			.then((data) => {
+
+				setCategories(data);
+				console.log(categories);
+			})
+			.catch((error) => {
+				console.error("Error al obtener la página:", error);
+			});
+		console.log(categories);
+	}, []);
+	const handleSwitchChange = () => {
+		setIsActive(!isActive);
+	};
+
+	const handleCategoriesPost = (categories) => {
+		setCategoriesPost(categories);
+	};
+
+	let pickerItems = [];
+	for (let i = 0; i < categories.length; i++) {
+		pickerItems.push(
+			<Picker.Item
+				key={categories[i].id}
+				label={categories[i].name}
+				value={categories[i].id}
+			/>
+		);
+	}
 
 	const ip = "192.168.20.20";
 
-	const handleCreatePost = () => {
+	const handleCreatePost = async () => {
 		const formData = new FormData();
 		formData.append("titulo", newPost.titulo);
 		formData.append("subtitulo", newPost.subtitulo);
 		formData.append("descripcion", newPost.descripcion);
-        formData.append("categorias", newPost.categorias);
+		formData.append("categorias", newPost.categorias);
+		const accessToken = await AsyncStorage.getItem("accessToken");
 
 		// Agrega las imágenes seleccionadas al formulario
-		newPost.avatar.forEach((uri, index) => {
+		/* newPost.avatar.forEach((url, index) => {
 			formData.append("avatar", {
 				uri: uri,
 				type: "image/jpeg",
 				name: "avatar.jpg",
 			});
-		});
+		}); */
 		console.log("Post: ", formData);
-		const url = `http://mantenimientoandino.co:3000/api/v1/admin/posts/new-post`;	
-    	fetch(url, {
+		const url = `http://mantenimientoandino.co:3000/api/v1/admin/posts/new-post`;
+		fetch(url, {
 			method: "POST",
+			headers: {
+				"Content-Type": "multipart/form-data",
+				Authorization: `Bearer ${accessToken}`,
+			},
 			body: formData,
 		})
 			.then((response) => {
@@ -73,22 +124,29 @@ const Case1 = () => {
 			});
 	};
 
-	const handleCreateCategory = () => {
-		const formData = new FormData();
-		formData.append("nombre", newCategory.nombre);
-		formData.append("active", newCategory.active);
+	const handleCreateCategory = async () => {
+		const newCategoryData = {
+			nombre: newCategory.nombre,
+			active: newCategory.active,
+		};
+		const accessToken = await AsyncStorage.getItem("accessToken");
 
-		console.log("Category: ", formData);
+		console.log("Category: ", newCategoryData);
 		const url = `http://mantenimientoandino.co:3000/api/v1/admin/categories/new-category`;
 
 		fetch(url, {
 			method: "POST",
-			body: formData,
+			headers: {
+				"Content-Type": "application/json",
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: JSON.stringify(newCategoryData),
 		})
 			.then((response) => {
 				if (!response.ok) {
 					throw new Error("Network response was not ok");
 				}
+				console.log(response.json());
 				return response.json();
 			})
 			.then((data) => {
@@ -117,7 +175,7 @@ const Case1 = () => {
 
 	const handleImageSelection = (selectedImages) => {
 		if (selectedImages) {
-			const avatarUris = selectedImages.map((image) => image.uri);
+			const avatarUris = selectedImages.map((image) => image.ur);
 			setNewPost({ ...newPost, avatar: avatarUris });
 			setImages(selectedImages);
 		}
@@ -166,7 +224,7 @@ const Case1 = () => {
 					keyExtractor={(item) => item._id.toString()}
 					renderItem={({ item }) => (
 						<Surface elevation={4} style={styles.card}>
-							{item.avatar.map((avatarUri, index) => (
+							{/* {item.avatar.map((avatarUri, index) => (
 								<Image
 									key={index} // Asegúrate de proporcionar una clave única para cada imagen
 									source={{
@@ -179,7 +237,7 @@ const Case1 = () => {
 										margin: 5,
 									}}
 								/>
-							))}
+							))} */}
 							<Text style={[styles.cardText, styles.cardTitle]}>
 								{item.title}
 							</Text>
@@ -202,7 +260,12 @@ const Case1 = () => {
 			</View>
 			<Button
 				onPress={() => setModalVisiblePost(true)}
-				title='Add Post'
+				title='Crear Post'
+				style={styles.button}
+			/>
+			<Button
+				onPress={() => setModalVisibleCategory(true)}
+				title='Crear Categoría'
 				style={styles.button}
 			/>
 
@@ -233,6 +296,12 @@ const Case1 = () => {
 							}}
 						/>
 
+						<Picker
+							selectedValue={selectedCategory}
+							onValueChange={setSelectedCategory}>
+							{pickerItems}
+						</Picker>
+
 						<TextInput
 							placeholder='Descripción'
 							style={styles.input}
@@ -250,15 +319,15 @@ const Case1 = () => {
 						/>
 						<TakePhoto onImageSelect={handleImageSelection} />
 
-						{/* {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */}
+						{/* {image && <Image source={{ url: image.url }} style={{ width: 200, height: 200 }} />} */}
 						{images && images.length > 0 && (
 							<FlatList
 								data={images}
 								horizontal
-								keyExtractor={(item) => item.uri}
+								keyExtractor={(item) => item.url}
 								renderItem={({ item }) => (
 									<Image
-										source={{ uri: item.uri }}
+										source={{ uri: item.url }}
 										style={{
 											width: 100,
 											height: 100,
@@ -288,61 +357,38 @@ const Case1 = () => {
 							style={styles.input}
 							onChangeText={(title_text) => {
 								console.log(title_text);
-								setNewPost({ ...newCategory, nombre: title_text });
-							}}
-						/>
-
-                        <View>
-                            <Switch 
-                                value={isActive} 
-                                onValueChange={setNewPost({
-									...newPost,
-									active: !isActive
-								})} 
-                                style={{ transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }] , marginRight: 10 }}
-                                trackColor={{ true: 'dodgerblue' }}
-                                thumbColor={ isActive ? 'dodgerblue' : undefined}
-                            />
-                            <Text>Switch : {isActive ? "Activo" : "Inactivo"}</Text>
-                        </View>
-						<TextInput
-							placeholder='Description'
-							style={styles.input}
-							onChangeText={(description_text) => {
-								console.log(description_text);
-								setNewPost({
-									...newPost,
-									description: description_text,
+								setNewCategory({
+									...newCategory,
+									nombre: title_text,
 								});
 							}}
 						/>
 
-						<ImagePickerExample
-							onImageSelect={handleImageSelection}
-						/>
-						<TakePhoto onImageSelect={handleImageSelection} />
-
-						{/* {image && <Image source={{ uri: image.uri }} style={{ width: 200, height: 200 }} />} */}
-						{images && images.length > 0 && (
-							<FlatList
-								data={images}
-								horizontal
-								keyExtractor={(item) => item.uri}
-								renderItem={({ item }) => (
-									<Image
-										source={{ uri: item.uri }}
-										style={{
-											width: 100,
-											height: 100,
-											margin: 5,
-										}}
-									/>
-								)}
+						<View>
+							<Switch
+								value={isActive}
+								onValueChange={() => {
+									setNewCategory({
+										...newCategory,
+										active: !isActive,
+									});
+									setIsActive(!isActive);
+								}}
+								style={{
+									transform: [
+										{ scaleX: 1.5 },
+										{ scaleY: 1.5 },
+									],
+									marginRight: 10,
+								}}
+								trackColor={{ true: "dodgerblue" }}
+								thumbColor={isActive ? "dodgerblue" : undefined}
 							/>
-						)}
+						</View>
+
 						<Button
-							title='Create'
-							onPress={handleCreatePost}
+							title='Crear Categoría'
+							onPress={handleCreateCategory}
 							style={styles.button}
 						/>
 					</View>
