@@ -1,8 +1,11 @@
 import { Picker } from '@react-native-picker/picker';
 import axios from 'axios';
 import React, { useState } from 'react';
-import { Text, View, TextInput, Button, StyleSheet} from 'react-native';
+import { Text, View, TextInput, Button, StyleSheet, TouchableOpacity, Modal, Linking, ScrollView } from 'react-native';
+import Checkbox from 'expo-checkbox';
 import { useNavigation } from '@react-navigation/native';
+import Icon from 'react-native-vector-icons/AntDesign';
+import PrivacyPolicies from './PrivacyPolicies';
 
 const RegisterForm = () => {
   const [userName, setUserName] = useState('');
@@ -10,17 +13,24 @@ const RegisterForm = () => {
   // const [documentType, setDocumentType] = useState('Cédula de Cuidadania');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
+  const [policyAccepted, setPolicyAccepted] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
 
   navigator = useNavigation();
 
   const handleSubmit = () => {
-    const url = 'http://192.168.20.20:3000/api/v1/users/register';
+    if (!policyAccepted) {
+      // Si el usuario no ha aceptado la política de privacidad, no permite el registro.
+      alert('Debes aceptar la política de privacidad para registrarte');
+      return;
+    }
+    const url = 'http://mantenimientoandino.co:3000/api/v1/auth/register';
 
     const data = {
-      name: userName,
-      lastName: lastName,
+      firstname: userName,
+      lastname: lastName,
       email: email,
-      password: password,
+      current_password: password,
     };
 
     fetch(url, {
@@ -44,12 +54,33 @@ const RegisterForm = () => {
         console.error('Error:', error);
       });
 
+  };
 
+  const handleGoBack = () => {
+    navigator.goBack();
+  };
+
+  const handleCheckboxChange = () => {
+    setPolicyAccepted(!policyAccepted);
   };
 
   const goToLogin = () => {
     navigator.navigate('Login');
   }
+  // Función para abrir la política de privacidad en el navegador
+  const openPrivacyPolicy = () => {
+    const privacyPolicyURL = 'https://www.privacypolicies.com/live/59dbbc7f-5156-4132-a52f-d97a4a7ce84b';
+    Linking.openURL(privacyPolicyURL);
+  };
+  // Función para abrir el modal
+  const openPrivacyPolicyModal = () => {
+    setModalVisible(true);
+  };
+
+  // Función para cerrar el modal
+  const closePrivacyPolicyModal = () => {
+    setModalVisible(false);
+  };
 
   return (
     <View style = {styles.container}>
@@ -72,6 +103,39 @@ const RegisterForm = () => {
         </Picker> */}
         <TextInput style = {styles.input} placeholder = 'Correo Electónico' value = {email} onChangeText = {setEmail} keyboardType='email-address'></TextInput>
         <TextInput style = {styles.input} placeholder = 'Password' value = {password} onChangeText = {setPassword} secureTextEntry={true}></TextInput>
+        {/* Agregar el CheckBox para la política de privacidad */}
+        <View style={{margin: 10}}>
+          <View style={styles.checkboxContainer}>
+            <Checkbox value={policyAccepted} onValueChange={handleCheckboxChange} />
+            <Text style={styles.checkboxLabel}>He leído y Acepto la política de privacidad</Text>
+          </View>
+          <TouchableOpacity
+              style={{ alignItems: 'center', paddingTop: 10 }}
+              onPress={openPrivacyPolicyModal}
+            >
+              <Text style={{ color: "blue" }}>Ver Política de Privacidad</Text>
+          </TouchableOpacity>
+          <Modal
+            animationType="slide"
+            // transparent={true}
+            visible={modalVisible}
+            onRequestClose={() => {
+              setModalVisible(!modalVisible);
+            }}
+          >
+            <View style={{ flexDirection: 'row', alignItems: 'flex-end', height: 70, backgroundColor: 'lightgray', justifyContent: "space-between" , padding: 20}}>
+              <View style={{ flexDirection: 'row'}}>
+                  <TouchableOpacity onPress={handleGoBack}>
+                  <Icon name="arrowleft" size={24} color="black" />
+                  </TouchableOpacity>
+              </View>
+            </View>
+
+            <ScrollView contentContainerStyle={styles.contentContainer}>
+              <PrivacyPolicies />
+            </ScrollView>
+          </Modal>
+        </View>
         <Button title = 'Registrarse' onPress = {handleSubmit} />
       </View>
 
@@ -116,6 +180,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 3,
+  },
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
 });
 
