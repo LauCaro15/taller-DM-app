@@ -3,11 +3,15 @@ import { View, Text, StyleSheet, TextInput, Button, Alert} from 'react-native';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Picker } from "@react-native-picker/picker";
 
 const LoginForm = () => {
+  const [selectedCategory, setSelectedCategory] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigation = useNavigation();
+
+
   const handleLogin = async () => {
     console.log("Email", email);
     console.log("Password", password);
@@ -59,6 +63,7 @@ const LoginForm = () => {
           onChangeText={text => setEmail(text)}
           value={email}
         />
+        
         <TextInput
           style={styles.input}
           placeholder="Contraseña"
@@ -72,6 +77,15 @@ const LoginForm = () => {
         <Text style={styles.text}>¿No tienes una cuenta?</Text>
         <Button title="Registrarse" onPress={goToRegister} />
       </View>
+      
+
+            {/* <Picker selectedValue = {selectedCategory} onValueChange = {(itemSelected) => setSelectedCategory(itemSelected)}>
+          <Picker.Item label = 'Cédula de Cuidadania' value = 'Cédula de Cuidadania' />
+          <Picker.Item label = 'Cédula Extranjera' value = 'Cédula Extranjera' />
+          <Picker.Item label = 'Tarjeta de Identidad' value = 'Tarjeta de Identidad' />
+          <Picker.Item label = 'Pasaporte' value = 'Pasaporte' />
+          <Picker.Item label = 'Otro' value = 'Otro' />
+        </Picker>     */}
     </View>
   );
 };

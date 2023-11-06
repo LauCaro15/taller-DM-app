@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, Button } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { Button } from "@react-native-material/core"
 
 export default function PhotoPicker({ onImageSelect }) {
     const [image, setImage] = useState(null);
@@ -22,7 +23,7 @@ export default function PhotoPicker({ onImageSelect }) {
 
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Take a photo" onPress={cameraLaunch} />
+      <Button title="Take a photo" onPress={cameraLaunch} style={{color: "#841584"}}/>
     </View>
   );
 }

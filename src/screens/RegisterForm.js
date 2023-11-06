@@ -94,7 +94,7 @@ const RegisterForm = () => {
         </TextInput>
 
         <TextInput style = {styles.input} placeholder = 'Apellidos' value = {lastName} onChangeText = {setLastName}></TextInput>
-        {/* <Picker selectedValue = {documentType} onValueChange = {(itemSelected) => setDocumentType(itemSelected)}>
+        {/* <Picker selectedValue = {""} onValueChange = {(itemSelected) => setDocumentType(itemSelected)}>
           <Picker.Item label = 'Cédula de Cuidadania' value = 'Cédula de Cuidadania' />
           <Picker.Item label = 'Cédula Extranjera' value = 'Cédula Extranjera' />
           <Picker.Item label = 'Tarjeta de Identidad' value = 'Tarjeta de Identidad' />

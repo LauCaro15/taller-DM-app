@@ -8,6 +8,7 @@ import {
 	TextInput,
 	FlatList,
 	Text,
+	SafeAreaView,
 } from "react-native";
 import ImagePickerExample from "../components/ImagePicker";
 import TakePhoto from "../components/TakePhoto";
@@ -16,9 +17,10 @@ import { Surface, Button } from "@react-native-material/core";
 import { Switch } from "react-native";
 import { Picker } from "@react-native-picker/picker";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import MultiSelect from "react-native-multiple-select";
+
 
 const Case1 = () => {
-	const accessToken = AsyncStorage.getItem("accessToken");
 	const [images, setImages] = useState(""); // Para almacenar las imágenes seleccionadas
 	const [postList, setPostList] = useState([]);
 
@@ -39,28 +41,9 @@ const Case1 = () => {
 	const [isActive, setIsActive] = useState(undefined);
 
 	const [categories, setCategories] = useState([]);
-	const [selectedCategory, setSelectedCategory] = useState(
-		"Categoría Seleccionada"
-	);
-	useEffect(() => {
-		const url ="http://mantenimientoandino.co:3000/api/v1/admin/categories";
-		fetch(url)
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error("Error al obtener la página");
-				}
-				return response.json();
-			})
-			.then((data) => {
+	const [selectedCategory, setSelectedCategory] = useState([]);
 
-				setCategories(data);
-				console.log(categories);
-			})
-			.catch((error) => {
-				console.error("Error al obtener la página:", error);
-			});
-		console.log(categories);
-	}, []);
+	
 	const handleSwitchChange = () => {
 		setIsActive(!isActive);
 	};
@@ -68,17 +51,6 @@ const Case1 = () => {
 	const handleCategoriesPost = (categories) => {
 		setCategoriesPost(categories);
 	};
-
-	let pickerItems = [];
-	for (let i = 0; i < categories.length; i++) {
-		pickerItems.push(
-			<Picker.Item
-				key={categories[i].id}
-				label={categories[i].name}
-				value={categories[i].id}
-			/>
-		);
-	}
 
 	const ip = "192.168.20.20";
 
@@ -90,14 +62,12 @@ const Case1 = () => {
 		formData.append("categorias", newPost.categorias);
 		const accessToken = await AsyncStorage.getItem("accessToken");
 
-		// Agrega las imágenes seleccionadas al formulario
-		/* newPost.avatar.forEach((url, index) => {
-			formData.append("avatar", {
-				uri: uri,
-				type: "image/jpeg",
-				name: "avatar.jpg",
-			});
-		}); */
+		formData.append("avatar", {
+			uri: images[0].uri,
+			type: "image/jpeg",
+			name: "avatar.jpg",
+		});
+		
 		console.log("Post: ", formData);
 		const url = `http://mantenimientoandino.co:3000/api/v1/admin/posts/new-post`;
 		fetch(url, {
@@ -158,21 +128,6 @@ const Case1 = () => {
 			});
 	};
 
-	/* const handleDeletePost = (postId) => {
-		console.log("Post ID: ", postId);
-		const updatePosts = postList.filter((post) => post._id !== postId);
-		setPostList(updatePosts);
-
-		axios
-			.delete(`http://${ip}:3000/api/v1/posts/${postId}`)
-			.then((response) => {
-				console.log("Data delete post: ", response.data);
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	}; */
-
 	const handleImageSelection = (selectedImages) => {
 		if (selectedImages) {
 			const avatarUris = selectedImages.map((image) => image.ur);
@@ -200,9 +155,33 @@ const Case1 = () => {
 			});
 	};
 
+	const listCategories = () => {
+		const url ="http://mantenimientoandino.co:3000/api/v1/admin/categories";
+		fetch(url)
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error("Error al obtener la página");
+				}
+				return response.json();
+			})
+			.then((data) => {
+
+				setCategories(data);
+				// console.log(categories);
+			})
+			.catch((error) => {
+				console.error("Error al obtener la página:", error);
+			});
+	}
+
 	useEffect(() => {
 		listPosts();
 	}, [postList]);
+
+
+	useEffect(() => {
+		listCategories();
+	}, [categories]);
 
 	return (
 		<View
@@ -224,57 +203,72 @@ const Case1 = () => {
 					keyExtractor={(item) => item._id.toString()}
 					renderItem={({ item }) => (
 						<Surface elevation={4} style={styles.card}>
-							{/* {item.avatar.map((avatarUri, index) => (
-								<Image
-									key={index} // Asegúrate de proporcionar una clave única para cada imagen
-									source={{
-										uri: `http://mantenimientoandino.co:3000/uploads/news/${avatarUri}`,
-									}}
-									style={{
-										width: 100,
-										height: 100,
-										borderRadius: 50,
-										margin: 5,
-									}}
-								/>
-							))} */}
+							
+							<Image
+								// Asegúrate de proporcionar una clave única para cada imagen
+								source={{
+									uri: `http://mantenimientoandino.co:3000/${item.avatar}`,
+								}}
+								style={{
+									width: 100,
+									height: 100,
+									borderRadius: 50,
+									margin: 5,
+								}}
+							/>
+							
 							<Text style={[styles.cardText, styles.cardTitle]}>
-								{item.title}
+								{item.titulo}
 							</Text>
-							<Text style={styles.cardText}>{item.subtitle}</Text>
+							<Text style={styles.cardText}>{item.subtitulo}</Text>
 							<Text style={styles.cardText}>
-								{item.description}
+								{item.descripcion}
 							</Text>
+							
+							{item.categorias.map((category) => (
+								<Text style={styles.cardText} key={category._id}>
+									{category}
+								</Text>
+							))}
+						
 							<Text style={styles.cardText}>
 								{item.active ? "Activo" : "Inactivo"}
 							</Text>
-							<Button
+							{/* <Button
 								title='Delete'
 								style={styles.button}
 								onPress={() =>
 									handleDeletePost(item._id.toString())
 								}
-							/>
+							/> */}
 						</Surface>
 					)}></FlatList>
 			</View>
-			<Button
-				onPress={() => setModalVisiblePost(true)}
-				title='Crear Post'
-				style={styles.button}
-			/>
-			<Button
-				onPress={() => setModalVisibleCategory(true)}
-				title='Crear Categoría'
-				style={styles.button}
-			/>
+			<View style={{padding: 10, gap:10}}>
+				<Button
+					onPress={() => setModalVisiblePost(true)}
+					title='Crear Post'
+					style={styles.button}
+				/>
+				<Button
+					onPress={() => setModalVisibleCategory(true)}
+					title='Crear Categoría'
+					style={styles.button}
+				/>
+			</View>
+			
 
-			<View>
+			<SafeAreaView>
+				
 				<Modal
 					visible={modalVisiblePost}
 					onRequestClose={() => setModalVisiblePost(false)}
-					animationType='slide'>
+					animationType='slide'
+					style={{padding: 20 }}
+					>
+					
 					<View style={styles.modalContainer}>
+						<View>
 						<TextInput
 							placeholder='Título'
 							style={styles.input}
@@ -295,12 +289,23 @@ const Case1 = () => {
 								});
 							}}
 						/>
+						
+						{/* {console.log('categories:', categories)} */}
+						{/* {console.log('selectedCategory:', selectedCategory)} */}
+							{/* <Picker
+								selectedValue={selectedCategory}
+								onValueChange={(itemValue, itemIndex) => setSelectedCategory(itemValue)}
+								>
+								{categories.map((category) => (
+									<Picker.Item
+										key={category._id}
+										label={category.nombre}
+										value={category._id}
+									/>
+									
+								))}
+							</Picker> */}
 
-						<Picker
-							selectedValue={selectedCategory}
-							onValueChange={setSelectedCategory}>
-							{pickerItems}
-						</Picker>
 
 						<TextInput
 							placeholder='Descripción'
@@ -314,29 +319,60 @@ const Case1 = () => {
 							}}
 						/>
 
-						<ImagePickerExample
-							onImageSelect={handleImageSelection}
+						<MultiSelect
+							items={categories.map((category) => ({
+								id: category._id,
+								name: category.nombre,
+							}))}
+							uniqueKey="id"
+							onSelectedItemsChange={(selectedItems) => {
+								console.log(selectedItems);
+								setNewPost({
+									...newPost,
+									categorias: selectedItems,
+								});
+							}}
+							selectedItems={newPost.categorias}
+							selectText="Selecciona categorías"
+							searchInputPlaceholderText="Buscar categorías..."
+							tagRemoveIconColor="red"
+							tagBorderColor="blue"
+							tagTextColor="blue"
+							selectedItemTextColor="blue"
+							selectedItemIconColor="blue"
+							itemTextColor="black"
+							displayKey="name"
+							searchInputStyle={{ color: 'black' }}
 						/>
-						<TakePhoto onImageSelect={handleImageSelection} />
-
-						{/* {image && <Image source={{ url: image.url }} style={{ width: 200, height: 200 }} />} */}
-						{images && images.length > 0 && (
-							<FlatList
-								data={images}
-								horizontal
-								keyExtractor={(item) => item.url}
-								renderItem={({ item }) => (
-									<Image
-										source={{ uri: item.url }}
-										style={{
-											width: 100,
-											height: 100,
-											margin: 5,
-										}}
-									/>
-								)}
+						
+						</View>
+						
+						<View style={{flex : 1, flexWrap: "wrap", justifyContent: "middle"}}>	
+							{/* {image && <Image source={{ url: image.url }} style={{ width: 200, height: 200 }} />} */}
+							{images && images.length > 0 && (
+								<FlatList
+									data={images}
+									horizontal
+									keyExtractor={(item) => item.uri}
+									renderItem={({ item }) => (
+										<Image
+											source={{ uri: item.uri }}
+											style={{
+												width: 150,
+												height: 100,
+												margin: 5,
+											}}
+										/>
+									)}
+								/>
+							)}
+							<ImagePickerExample
+								onImageSelect={handleImageSelection}
+								style={{ backgroundColor: "red" }}
 							/>
-						)}
+
+							<TakePhoto onImageSelect={handleImageSelection} />
+						</View>
 						<Button
 							title='Crear Publicación'
 							onPress={handleCreatePost}
@@ -344,7 +380,7 @@ const Case1 = () => {
 						/>
 					</View>
 				</Modal>
-			</View>
+			</SafeAreaView>
 
 			<View>
 				<Modal
